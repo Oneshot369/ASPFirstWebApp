@@ -15,12 +15,17 @@ namespace ASPFirstWebApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View("Index");
         }
 
         public IActionResult Privacy()
         {
-            return View();
+            ViewBag.Message = "Be careful about your privacy";
+            return View("Privacy");
+        }
+        public IActionResult AboutMe()
+        {
+            return View("AboutMe");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
