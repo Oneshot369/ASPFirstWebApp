@@ -26,7 +26,7 @@ namespace ASPFirstWebApp.Services
             return products;
         }
 
-        public bool Delete(ProductModel product)
+        public bool Delete(int Id)
         {
             throw new NotImplementedException();
         }

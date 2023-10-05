@@ -8,7 +8,7 @@ namespace ASPFirstWebApp.Services
         List<T> SearchProducts(string searchTerm);
         T GetProductById(int id);
         int Insert(T product);
-        bool Delete(T product);
+        bool Delete(int Id);
         int Update(T product);
     }
 }

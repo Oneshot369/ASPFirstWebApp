@@ -39,9 +39,32 @@ namespace ASPFirstWebApp.Services
             return foundProducts;
         }
 
-        public bool Delete(ProductModel product)
+        public bool Delete(int Id)
         {
-            throw new NotImplementedException();
+            bool didDel = false;
+
+            string sqlStatment = "DELETE from dbo.Products WHERE Id = @id";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(sqlStatment, con);
+
+                command.Parameters.AddWithValue("@id", Id);
+
+                try
+                {
+                    con.Open();
+                    int rows = command.ExecuteNonQuery();
+                    if (rows > 0)
+                        didDel = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            return didDel;
         }
 
         public ProductModel GetProductById(int id)
@@ -52,7 +75,30 @@ namespace ASPFirstWebApp.Services
 
             using (SqlConnection con = new SqlConnection(connectionString))
             {
+                SqlCommand command = new SqlCommand(sqlStatment, con);
 
+                command.Parameters.AddWithValue("@id", id);
+
+                try
+                {
+                    con.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        product = (new ProductModel
+                        (
+                            (int)reader[0],
+                            (string)reader[1],
+                            (decimal)reader[2],
+                            (string)reader[3]
+                        ));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
             }
 
             return product;
@@ -101,7 +147,29 @@ namespace ASPFirstWebApp.Services
 
         public int Update(ProductModel product)
         {
-            throw new NotImplementedException();
+            int newIdNumber = -1;
+            string sqlStatment = "Update dbo.Products SET Name = @name, Price = @price, Description = @description WHERE Id = @id";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(sqlStatment, con);
+
+                command.Parameters.AddWithValue("@id", product.Id);
+                command.Parameters.AddWithValue("@name", product.Name);
+                command.Parameters.AddWithValue("@description", product.Description);
+                command.Parameters.AddWithValue("@price", product.Price);
+
+                try
+                {
+                    con.Open();
+                    newIdNumber = Convert.ToInt32(command.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                return newIdNumber;
+            }
         }
     }
 }
