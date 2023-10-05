@@ -46,7 +46,16 @@ namespace ASPFirstWebApp.Services
 
         public ProductModel GetProductById(int id)
         {
-            throw new NotImplementedException();
+            ProductModel product = null;
+
+            string sqlStatment = "SELECT * from dbo.Products WHERE Id = @id";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+
+            }
+
+            return product;
         }
 
         public int Insert(ProductModel product)

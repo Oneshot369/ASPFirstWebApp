@@ -1,6 +1,26 @@
 ﻿@model IEnumerable<ASPFirstWebApp.Models.ProductModel>
 
-<p>
+
+<div class="container d-flex flex-wrap">
+    @foreach (var item in Model) {
+        <div class="card" style="width: 18rem; margin:5px;">
+            @{
+                var s = item.Name;
+                var firstWord = s.IndexOf(" ") > -1 ? s.Substring(0, s.IndexOf(" ")): s;
+            }
+
+            <img src="https://loremflickr.com/160/120/@firstWord?lock=@item.Id" class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title">@item.Name</h5>
+
+                <p class="card-text"> @Html.DisplayFor(modelItem => item.Price)</p>
+                <a href="#" class="bnt bnt primary">Go somewhere</a>
+            </div>
+        </div>
+    }
+</div>
+
+@*<p>
     <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
@@ -45,3 +65,4 @@
 }
     </tbody>
 </table>
+*@
