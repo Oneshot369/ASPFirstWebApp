@@ -1,5 +1,5 @@
 ﻿using ASPFirstWebApp.Models;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 
 namespace ASPFirstWebApp.Services
 {
@@ -13,6 +13,30 @@ namespace ASPFirstWebApp.Services
             string SQLStatement = "SELECT * FROM dbo.Products";
 
             using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(SQLStatement, con);
+
+                try
+                {
+                    con.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        foundProducts.Add(new ProductModel
+                        (
+                            (int)reader[0],
+                            (string)reader[1],
+                            (decimal)reader[2],
+                            (string)reader[3]
+                        ));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return foundProducts;
         }
 
         public bool Delete(ProductModel product)
@@ -32,7 +56,38 @@ namespace ASPFirstWebApp.Services
 
         public List<ProductModel> SearchProducts(string searchTerm)
         {
-            throw new NotImplementedException();
+            List<ProductModel> foundProducts = new List<ProductModel>();
+
+            string SQLStatement = "SELECT * FROM dbo.Products WHERE Name LIKE @name";
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(SQLStatement, con);
+
+                command.Parameters.AddWithValue("@name", '%' + searchTerm + '%');
+
+                try
+                {
+                    con.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        foundProducts.Add(new ProductModel
+                        (
+                            (int)reader[0],
+                            (string)reader[1],
+                            (decimal)reader[2],
+                            (string)reader[3]
+                        ));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return foundProducts;
         }
 
         public int Update(ProductModel product)
