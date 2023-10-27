@@ -46,15 +46,22 @@ namespace ASPFirstWebApp.Controllers
             repo.Update(product);
             return View("Index", repo.AllProducts());
         }
+        public IActionResult ProcessEditReturnPartial(ProductModel product)
+        {
+            repo.Update(product);
+            return PartialView("_productCard", product);
+        }
         //END - Update
         public IActionResult ProcessDelete(int Id)
         {
             repo.Delete(Id);
             return View("Index", repo.AllProducts());
         }
-        //Update
-
-        //END - Update
+        //show json
+        public IActionResult ShowOneJSON(int Id)
+        {
+            return Json(repo.GetProductById(Id));
+        }
 
         //movie
         public IActionResult Movie()
