@@ -23,16 +23,29 @@ namespace ASPFirstWebApp.Controllers
 
         //Home
         [HttpGet]
-        public ActionResult<IEnumerable<ProductModel>> Index()
+        [ResponseType(typeof(List<ProductDTO>))]
+        public IEnumerable<ProductDTO> Index()
         {
-            return repo.AllProducts();
+            List<ProductModel> proudctModels = repo.AllProducts();
+            //make it into a DTO
+            IEnumerable<ProductDTO> productDTOList = from p in proudctModels
+                                                     select
+                                                     new ProductDTO(p);
+
+            return productDTOList;
         }
 
         //Searching Methods
         [HttpGet("searchresults/{searchTerm}")]
-        public ActionResult<IEnumerable<ProductModel>> SearchResults(string searchTerm)
+        [ResponseType(typeof(List<ProductDTO>))]
+        public IEnumerable<ProductDTO> SearchResults(string searchTerm)
         {
-            return repo.SearchProducts(searchTerm);
+            List<ProductModel> proudctModels = repo.SearchProducts(searchTerm);
+            //make it into a DTO
+            IEnumerable<ProductDTO> productDTOList = from p in proudctModels
+                                                     select
+                                                     new ProductDTO(p);
+            return productDTOList;
         }
 
         //END - Searching Methods
@@ -52,25 +65,36 @@ namespace ASPFirstWebApp.Controllers
 
         //Update
         [HttpPut("processedit")]
-        public ActionResult<IEnumerable<ProductModel>> ProcessEdit(ProductModel product)
+        [ResponseType(typeof(List<ProductDTO>))]
+        public IEnumerable<ProductDTO> ProcessEdit(ProductModel product)
         {
             repo.Update(product);
-            return repo.AllProducts();
+            List<ProductModel> proudctModels = repo.AllProducts();
+            //make it into a DTO
+            IEnumerable<ProductDTO> productDTOList = from p in proudctModels
+                                                     select
+                                                     new ProductDTO(p);
+
+            return productDTOList;
         }
 
         [HttpPut("processeditreturnoneitem")]
-        public ActionResult<ProductModel> ProcessEditReturnOneItem(ProductModel product)
+        public ProductDTO ProcessEditReturnOneItem(ProductModel product)
         {
             repo.Update(product);
-            return repo.GetProductById(product.Id);
+            ProductModel proudctModel = repo.GetProductById(product.Id);
+            //make it into a DTO
+            ProductDTO productDTO = new ProductDTO(proudctModel);
+
+            return productDTO;
         }
 
-        [HttpDelete("delete/{Id}")]
-        public ActionResult<IEnumerable<ProductModel>> ProcessDelete(int Id)
-        {
-            repo.Delete(Id);
-            return repo.AllProducts();
-        }
+        //[HttpDelete("delete/{Id}")]
+        //public ActionResult<IEnumerable<ProductModel>> ProcessDelete(int Id)
+        //{
+        //    repo.Delete(Id);
+        //    return repo.AllProducts();
+        //}
         //show json
         //public IActionResult ShowOneJSON(int Id)
         //{
