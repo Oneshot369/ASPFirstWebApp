@@ -16,11 +16,6 @@ namespace ASPFirstWebApp.Controllers
             repo = new ProductDAO();
         }
 
-        /// <summary>
-        /// Left off here\ | index
-        /// </summary>
-        /// <returns></returns>
-
         //Home
         [HttpGet]
         [ResponseType(typeof(List<ProductDTO>))]
