@@ -7,10 +7,10 @@ namespace ASPFirstWebApp.Controllers
 {
     public class ProductsController : Controller
     {
-        ProductDAO repo = new ProductDAO();
-        public ProductsController()
+        public IProductDataService<ProductModel> repo { get; set; }
+        public ProductsController(IProductDataService<ProductModel> data)
         {
-            repo = new ProductDAO();
+            repo = data;
         }
         //Home
         public IActionResult Index()

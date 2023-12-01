@@ -1,7 +1,12 @@
+using ASPFirstWebApp.Models;
+using ASPFirstWebApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IProductDataService<ProductModel>, ProductDAO>();
+
 
 var app = builder.Build();
 
